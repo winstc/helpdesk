@@ -1,0 +1,12 @@
+{% extends "userportal/header.html" %}
+{% block content %}
+{% if latest_ticket_list %}
+    <ul>
+    {% for ticket in latest_ticket_list %}
+        <li><a href="/tickets/{{ ticket.id }}/">{{ ticket.description }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No tickets to show.</p>
+{% endif %}
+{% endblock %}

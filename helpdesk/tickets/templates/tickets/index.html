@@ -1,0 +1,24 @@
+{% extends "userportal/header.html" %}
+
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static 'tickets/css/grid.css' %}" type="text/css"/>
+<style>
+    .col-4{
+        color: red;
+    }
+</style>
+
+{% block content %}
+{% if latest_ticket_list %}
+    <ul>
+    {% for ticket in latest_ticket_list %}
+        <div class="row">
+            <div class="col-4"><a href="/tickets/{{ ticket.id }}/">{{ ticket.userName }}</a></div>
+            <div class="col-4"><p>{{ ticket.description }}</p> </div>
+        </div>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No tickets to show.</p>
+{% endif %}
+{% endblock %}
