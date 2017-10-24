@@ -3,7 +3,8 @@ from django.db import models
 class Ticket(models.Model):
 
     class Meta:
-        permissions = (("can_view_all", "View all tickets"), ("can_open", "Open a new ticket"))
+        permissions = (("can_view_all", "View all tickets"), ("can_open", "Open a new ticket"),
+                       ("can_edit_tickets", "Has full control of tickets"))
 
     COMPLETE = 'C'
     WAITING = "W"

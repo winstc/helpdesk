@@ -19,6 +19,10 @@
 {% csrf_token %}
 
 <div>
+    <a href="{% url "social:begin" "google-oauth2" %}">Google+</a>
+</div>
+
+<div>
   <td>{{ form.username.label_tag }}</td>
   <td>{{ form.username }}</td>
 </div>

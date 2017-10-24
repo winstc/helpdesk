@@ -14,8 +14,9 @@
     <link rel="stylesheet" href="{% static 'userportal/css/bootstrap.css' %}" type="text/css"/>
     <link rel="stylesheet" href="{% static 'userportal/css/header.css' %}" type="text/css"/>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
 
 
 </head>
@@ -35,19 +36,31 @@
             <li class="nav-item active">
                 <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Get Help!</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link disabled" href="#">Disabled</a>
+                {% if perms.tickets.can_edit_tickets %}
+                    <li class="nav-item dropdown show">
+                        <a class="nav-link dropdown-toggle" id="dropdown01"
+                           data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="true">Manage</a>
+                        <div class="dropdown-menu show" aria-labelledby="dropdown01">
+                            <a class="dropdown-item" href="#">Dashboard</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </li>
+                {% endif %}
         </ul>
 
         {% if user.is_authenticated %}
-             <form class="form-inline my-2 my-lg-0" action="{% url 'logout' %}?next={{ request.path }}">
-                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
+            <form class="form-inline my-2 my-lg-0" action="{% url 'logout' %}?next={{ request.path }}">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
             </form>
         {% else %}
-            <form class="form-inline my-2 my-lg-0" action="{% url 'login'%}?next={{request.path}}">
+            <form class="form-inline my-2 my-lg-0" action="{% url 'login' %}?next={{ request.path }}">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
             </form>
         {% endif %}
