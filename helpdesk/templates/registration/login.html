@@ -1,43 +1,49 @@
 {% extends "userportal/header.html" %}
 
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static 'registration/css/login.css' %}" type="text/css"/>
+
 {% block content %}
 
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
-
-{% if next %}
-    {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-    {% else %}
-    <p>Please login to see this page.</p>
+    {% if form.errors %}
+        <p>Your username and password didn't match. Please try again.</p>
     {% endif %}
-{% endif %}
 
-<form method="post" action="{% url 'login' %}">
-{% csrf_token %}
+    {% if next %}
+        {% if user.is_authenticated %}
+            <p>Your account doesn't have access to this page. To proceed,
+                please login with an account that has access.</p>
+        {% else %}
+            <p>Please login to see this page.</p>
+        {% endif %}
+    {% endif %}
 
-<div>
-    <a href="{% url "social:begin" "google-oauth2" %}">Google+</a>
-</div>
+    <div class="container ">
+        <form class="form-signin" method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <div>
+                    <td>{{ form.username.label_tag }}</td>
+                </div>
+                <div>
+                    <td>{{ form.username }}</td>
+                </div>
+                <div>
+                    <td>{{ form.password.label_tag }}</td>
+                </div>
+                <div>
+                    <td>{{ form.password }}</td>
+                </div>
+            </div>
+            <div class="btn-group">
+                <input class="btn btn-block" type="submit" value="Login"/>
+                <input type="hidden" name="next" value="{{ next }}"/>
+                <a class="btn btn-block btn-primary" href="{% url "social:begin" "google-oauth2" %}">Login with
+                    Google</a>
+            </div>
+        </form>
 
-<div>
-  <td>{{ form.username.label_tag }}</td>
-  <td>{{ form.username }}</td>
-</div>
-<div>
-  <td>{{ form.password.label_tag }}</td>
-  <td>{{ form.password }}</td>
-</div>
-
-<div>
-  <input type="submit" value="login" />
-  <input type="hidden" name="next" value="{{ next }}" />
-</div>
-</form>
-
-{# Assumes you setup the password_reset view in your URLconf #}
-<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
-
+        {# Assumes you setup the password_reset view in your URLconf #}
+        <p><a class="btn btn-block" href="{% url 'password_reset' %}">Lost password?</a></p>
+    </div>
 {% endblock %}

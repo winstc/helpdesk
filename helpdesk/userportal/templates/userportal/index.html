@@ -1,6 +1,10 @@
 {% extends "userportal/header.html" %}
 {% block content %}
 
-<h1>Welcome to Helpdesk</h1>
+    <h1>Welcome to Helpdesk</h1>
+
+    {% if user.is_authenticated %}
+        <p>Welcome {{ user.username }}</p>
+    {% endif %}
 
 {% endblock %}

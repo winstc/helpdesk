@@ -19,7 +19,7 @@ from django.contrib import admin
 
 
 urlpatterns = [
-    url(r'^tickets/', include('tickets.urls')),
+    url(r'^ticket/', include('tickets.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^', include('userportal.urls')),
