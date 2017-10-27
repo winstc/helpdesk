@@ -1,6 +1,16 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 class Ticket(models.Model):
+
+    # todo:
+    # location
+    # category
+    #   wireless
+    #   printer, etc
+    # ip/mac address
+    # file
 
     class Meta:
         permissions = (("can_view_all", "View all tickets"), ("can_open", "Open a new ticket"),
@@ -16,13 +26,28 @@ class Ticket(models.Model):
         (WAITING, "Waiting")
     )
 
-    userName = models.CharField(max_length=200)
-    description = models.CharField(max_length=1000, default="No Description")
+    user = models.OneToOneField(User, default=1)
+    description = models.TextField()
     status = models.CharField(max_length=1,
                               choices=STATUS_CHOICES,
                               default="W")
-    priority = models.IntegerField(default=5)
+    priority = models.IntegerField(default=1)
     submissionDate = models.DateTimeField('date submitted')
 
     def __str__(self):
-        return str(self.userName)
+        return str(self.user.username + " - " + str(self.submissionDate.date()))
+
+
+class Question(models.Model):
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
+    questionTitle = models.CharField(max_length=100)
+    questionText = models.TextField()
+    questionHelpText = models.TextField()
+    questionType = models.CharField(max_length=15)
+
+
+class File(models.Model):
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
+    description = models.TextField()
+    file = models.FileField()
+    timestamp = models.DateTimeField()
