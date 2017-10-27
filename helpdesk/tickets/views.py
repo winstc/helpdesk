@@ -24,3 +24,9 @@ def details(request, ticket_id):
 
 def status(request, ticket_id):
     return HttpResponse("You're looking at the status of ticket %s" % ticket_id)
+
+
+def open_new(request):
+    template = loader.get_template('tickets/open.html')
+    return HttpResponse(template.render({}, request))
+

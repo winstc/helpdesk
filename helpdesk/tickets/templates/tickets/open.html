@@ -1,0 +1,21 @@
+{% extends "userportal/header.html" %}
+
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static 'tickets/css/grid.css' %}" type="text/css"/>
+
+{% block content %}
+
+    <h4>Please verify this information is correct:</h4>
+
+    <form method="post">
+        <div>
+            <label>Username:</label>
+            <input value={{ user.username }} type="text">
+        </div>
+        <div>
+        <label>Name:</label>
+            <input value="{{ user.name }}" type="text">
+        </div>
+    </form>
+
+{% endblock %}

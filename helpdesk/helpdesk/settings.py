@@ -133,3 +133,4 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '282579662788-59q2agegafjqo692pl5bd0jn5lipvq7a.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'WsOYWQ2S_TVcnZmJVnAw2gT7'
+SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = "whitemountain.org"

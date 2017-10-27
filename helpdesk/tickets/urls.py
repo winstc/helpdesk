@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^(?P<ticket_id>[0-9]+)/$', views.details, name='detail'),
     url(r'^(?P<ticket_id>[0-9]+)/status/$', views.status, name='status'),
+    url(r'^open/$', views.open_new, name='open_new')
 ]
