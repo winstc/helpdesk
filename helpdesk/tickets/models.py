@@ -2,15 +2,25 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class Ticket(models.Model):
+class Location(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.TextField(null=True, blank=True)
+    longitude = models.DecimalField(max_digits=8, decimal_places=3, null=True, blank=True)
+    latitude = models.DecimalField(max_digits=8, decimal_places=3, null=True, blank=True)
 
-    # todo:
-    # location
-    # category
-    #   wireless
-    #   printer, etc
-    # ip/mac address
-    # file
+    def __str__(self):
+        return self.name
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Ticket(models.Model):
 
     class Meta:
         permissions = (("can_view_all", "View all tickets"), ("can_open", "Open a new ticket"),
@@ -33,6 +43,9 @@ class Ticket(models.Model):
                               default="W")
     priority = models.IntegerField(default=1)
     submissionDate = models.DateTimeField('date submitted')
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    ipAddress = models.GenericIPAddressField()
 
     def __str__(self):
         return str(self.user.username + " - " + str(self.submissionDate.date()))
@@ -51,3 +64,8 @@ class File(models.Model):
     description = models.TextField()
     file = models.FileField()
     timestamp = models.DateTimeField()
+
+    def __str__(self):
+        return self.file.name
+
+
