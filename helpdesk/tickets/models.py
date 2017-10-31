@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+import django.utils.timezone
 
 class Location(models.Model):
     name = models.CharField(max_length=50)
@@ -36,13 +37,14 @@ class Ticket(models.Model):
         (WAITING, "Waiting")
     )
 
-    user = models.OneToOneField(User, default=1)
+    user = models.ForeignKey(User, default=1)
+    name = models.CharField(max_length=100)
     description = models.TextField()
     status = models.CharField(max_length=1,
                               choices=STATUS_CHOICES,
                               default="W")
     priority = models.IntegerField(default=1)
-    submissionDate = models.DateTimeField('date submitted')
+    submissionDate = models.DateTimeField('date submitted', default=django.utils.timezone.now)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     ipAddress = models.GenericIPAddressField()
