@@ -135,3 +135,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = credentials.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = credentials.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
 SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = credentials.SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS
+
+SOCIAL_AUTH_PIPELINES = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+)
