@@ -3,22 +3,47 @@
 {% load staticfiles %}
 <link rel="stylesheet" href="{% static 'tickets/css/grid.css' %}" type="text/css"/>
 <style>
-    .col-4{
+    .col-4 {
         color: red;
     }
 </style>
 
 {% block content %}
-{% if latest_ticket_list %}
-    <ul>
-    {% for ticket in latest_ticket_list %}
-        <div class="row">
-            <div class="col-4"><a href="/tickets/{{ ticket.id }}/">{{ ticket.userName }}</a></div>
-            <div class="col-4"><p>{{ ticket.description }}</p> </div>
-        </div>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No tickets to show.</p>
-{% endif %}
+    {% if latest_ticket_list %}
+        <table class="table table-hover table-stripped">
+            <thead>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Date Submitted</th>
+            <th>Status</th>
+            </thead>
+            <tbody>
+            {% for ticket in latest_ticket_list %}
+                <tr>
+                    <td><a href="/ticket/{{ ticket.id }}/">{{ ticket.name }}</a></td>
+                    <td><p>{{ ticket.description }}</p></td>
+                    <td>{{ ticket.submissionDate }}</td>
+
+                    <td class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle
+                                {% if ticket.status == "W" %} btn-danger
+                                {% elif ticket.status == "I" %} btn-warning
+                                {% elif ticket.status == "C" %} btn-success
+                                {% endif %}"
+                                id="ticket{{ ticket.id }}"
+                                data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">{{ ticket.get_status_display }}</button>
+                        <div class="dropdown-menu" aria-labelledby="ticket{{ ticket.id }}">
+                            <a class="dropdown-item" href="#">Waiting</a>
+                            <a class="dropdown-item" href="#">In Progress</a>
+                            <a class="dropdown-item" href="#">Complete</a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No tickets to show.</p>
+    {% endif %}
 {% endblock %}
