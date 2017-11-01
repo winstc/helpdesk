@@ -1,7 +1,16 @@
 {% extends "userportal/header.html" %}
 {% block content %}
 
-    <h1>Welcome to Helpdesk</h1>
+    <div class="jumbotron">
+        <h1>Welcome to Helpdesk</h1>
+        <h2>To open a new support ticket</h2>
+        <h2>click on <a href="/ticket/open"><i>Get Help!</i></a> above</h2>
+
+        <div>
+            <h4 class="text-info">This site is currently under construction,</h4>
+            <h4 class="text-info">things may change from day to day.</h4>
+        </div>
+    </div>
 
     {% if user.is_authenticated %}
         <p>Welcome {{ user.username }}</p>
