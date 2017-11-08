@@ -58,7 +58,7 @@ ROOT_URLCONF = 'helpdesk.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['./templates',],
+        'DIRS': ['./templates', ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -130,13 +130,16 @@ STATIC_URL = '/static/'
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = credentials.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = credentials.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
 SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = credentials.SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS
 
-SOCIAL_AUTH_PIPELINES = (
-    'social_core.pipeline.social_auth.social_details',
-    'social_core.pipeline.social_auth.social_uid',
-)
+EMAIL_HOST = credentials.EMAIL_HOST
+EMAIL_PORT = credentials.EMAIL_PORT
+EMAIL_HOST_USER = credentials.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = credentials.EMAIL_HOST_PASSWORD
+EMAIL_USE_TLS = credentials.EMAIL_USE_TLS
+
+MEDIA_ROOT = '/home/winston/test_dir/'
