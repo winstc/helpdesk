@@ -1,12 +1,35 @@
 {% extends "userportal/header.html" %}
 {% block content %}
-{% if latest_ticket_list %}
-    <ul>
-    {% for ticket in latest_ticket_list %}
-        <li><a href="/tickets/{{ ticket.id }}/">{{ ticket.description }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No tickets to show.</p>
-{% endif %}
+
+    <div class="card-columns">
+        <div class="card">
+            <div class="card-header">Details</div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><b>Name: </b> {{ ticket.user }}</li>
+                    <li class="list-group-item"><b>E-mail: </b> {{ ticket.user.email }}</li>
+                    <li class="list-group-item"><b>Location: </b> {{ ticket.location }}</li>
+                    <li class="list-group-item"><b>Category: </b> {{ ticket.category }}</li>
+                    <li class="list-group-item"><b>IP Address: </b> {{ ticket.ipAddress }} </li>
+                </ul>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">Description</div>
+            <div class="card-body">
+                {{ ticket.description }}
+            </div>
+        </div>
+
+        <div class="card text-white">
+            <div class="card-header bg-dark">Actions</div>
+            <div class="card-body">
+                <div class="btn-group">
+                    <button class="btn btn-success">Close</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 {% endblock %}

@@ -7,17 +7,54 @@
 
     <h4>Please verify this information is correct:</h4>
 
-    <form action="/ticket/open/" method="post">
+    <form action="/ticket/open/" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <table class="table">
 
-        {{ form.as_table }}
+            {{ form.as_table }}
+
+            <tr>
+                <th>File Upload:</th>
+                <td>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#fileModal">
+                        Attach File
+                    </button>
+
+                </td>
+            </tr>
 
         </table>
+        <input type="submit" value="Submit"/>
 
-         <input type="submit" value="Submit" />
+
+        <div class="modal" id="fileModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Test
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row">
+                                <table class="table">
+                                    {{ file_form.as_table }}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </form>
+
+
 
 {% endblock %}
 --/>

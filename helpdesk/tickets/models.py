@@ -64,8 +64,8 @@ class Question(models.Model):
 class File(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
     description = models.TextField()
-    file = models.FileField()
-    timestamp = models.DateTimeField()
+    file = models.FileField(upload_to='uploads/')
+    timestamp = models.DateTimeField(default=django.utils.timezone.now)
 
     def __str__(self):
         return self.file.name
