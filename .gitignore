@@ -53,3 +53,4 @@ fabric.properties
 /helpdesk/userportal/migrations/
 
 /helpdesk/helpdesk/credentials.py
+/helpdesk/media/uploads/
