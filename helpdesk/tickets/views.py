@@ -37,13 +37,6 @@ def index(request):
 def details(request, ticket_id):
     if request.method == "POST":
 
-        file_form = FileUploadForm(request.POST, request.FILES)
-
-        if file_form.is_valid():
-            new_file = file_form.save(commit=False)
-            new_file.ticket = ticket_id
-            new_file.save()
-
         action = request.POST.get('action')
         value = request.POST.get('value')
         ticket_id = request.POST.get('ticket_id')
@@ -86,14 +79,15 @@ def details(request, ticket_id):
 
                 return HttpResponse(t.status)
 
-    template = loader.get_template('tickets/details.html')
-    ticket = get_object_or_404(Ticket, pk=ticket_id)
+    else:
+        template = loader.get_template('tickets/details.html')
+        ticket = get_object_or_404(Ticket, pk=ticket_id)
 
-    file_form = FileUploadForm()
+        file_form = FileUploadForm()
 
-    media = File.objects.filter(ticket=ticket)
+        media = File.objects.filter(ticket=ticket)
 
-    return HttpResponse(template.render({'ticket': ticket, 'media': media, 'file_form': file_form}, request))
+        return HttpResponse(template.render({'ticket': ticket, 'media': media, 'file_form': file_form}, request))
 
 
 def status(request, ticket_id):
