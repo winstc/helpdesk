@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 import django.utils.timezone
+
 
 class Location(models.Model):
     name = models.CharField(max_length=50)
@@ -43,11 +45,14 @@ class Ticket(models.Model):
     status = models.CharField(max_length=1,
                               choices=STATUS_CHOICES,
                               default="W")
-    priority = models.IntegerField(default=1)
+    priority = models.IntegerField(default=1, validators=[
+        MinValueValidator(5),
+        MaxValueValidator(1)
+    ])
     submissionDate = models.DateTimeField('date submitted', default=django.utils.timezone.now)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    ipAddress = models.GenericIPAddressField()
+    ipAddress = models.GenericIPAddressField(null=True, blank=True)
 
     def __str__(self):
         return str(self.user.username + " - " + str(self.submissionDate.date()))
@@ -63,11 +68,9 @@ class Question(models.Model):
 
 class File(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
-    description = models.TextField()
-    file = models.FileField(upload_to='uploads/')
+    description = models.TextField(null=True, blank=True)
+    file = models.FileField(upload_to='uploads/', null=True, blank=True)
     timestamp = models.DateTimeField(default=django.utils.timezone.now)
 
     def __str__(self):
-        return self.file.name
-
-
+        return self.file.name.split("/")[-1]
