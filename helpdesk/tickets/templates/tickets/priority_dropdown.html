@@ -1,0 +1,42 @@
+<a class="dropdown">
+    <button class="btn dropdown-toggle btn-primary"
+            id="ticket{{ ticket.id }}"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false">{{ ticket.priority }}</button>
+    <div class="dropdown-menu" aria-labelledby="ticket{{ ticket.id }}">
+        {% csrf_token %}
+        <button class="dropdown-item priorityToggle" data-priority="1"
+                data-ticket="{{ ticket.id }}">1
+        </button>
+        <button class="dropdown-item priorityToggle" data-priority="2"
+                data-ticket="{{ ticket.id }}">2
+        </button>
+        <button class="dropdown-item priorityToggle" data-priority="3"
+                data-ticket="{{ ticket.id }}">3
+        </button>
+        <button class="dropdown-item priorityToggle" data-priority="4"
+                data-ticket="{{ ticket.id }}">4
+        </button>
+        <button class="dropdown-item priorityToggle" data-priority="5"
+                data-ticket="{{ ticket.id }}">5
+        </button>
+
+    </div>
+</a>
+
+<script>
+    $(document).ready(function () {
+        $('.priorityToggle').click(function () {
+            $.post(("/ticket/" + $(this).data('ticket') + "/"), {
+                    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                    ticket_id: $(this).data('ticket'),
+                    action: "priority",
+                    value: $(this).data('priority')
+                },
+                function () {
+                    window.location.reload(false)
+                });
+        });
+    });
+</script>

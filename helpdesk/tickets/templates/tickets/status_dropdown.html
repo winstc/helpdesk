@@ -1,0 +1,39 @@
+<a class="dropdown">
+    <button class="btn dropdown-toggle
+                                {% if ticket.status == "W" %} btn-danger
+                                {% elif ticket.status == "I" %} btn-warning
+                                {% elif ticket.status == "C" %} btn-success
+                                {% endif %}"
+            id="ticket{{ ticket.id }}"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false">{{ ticket.get_status_display }}</button>
+    <div class="dropdown-menu" aria-labelledby="ticket{{ ticket.id }}">
+        {% csrf_token %}
+        <button id="W{{ ticket.id }}" class="dropdown-item statusToggle" data-status="W"
+                data-ticket="{{ ticket.id }}">Waiting
+        </button>
+        <button id="I{{ ticket.id }}" class="dropdown-item statusToggle" data-status="I"
+                data-ticket="{{ ticket.id }}">In Progress
+        </button>
+        <button if="C{{ ticket.id }}" class="dropdown-item statusToggle" data-status="C"
+                data-ticket="{{ ticket.id }}">Complete
+        </button>
+    </div>
+</a>
+
+<script>
+    $(document).ready(function () {
+        $('.statusToggle').click(function () {
+            $.post(("/ticket/" + $(this).data('ticket') + "/"), {
+                    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                    ticket_id: $(this).data('ticket'),
+                    action: "status",
+                    value: $(this).data('status')
+                },
+                function (data, status) {
+                    window.location.reload(false)
+                });
+        });
+    });
+</script>
