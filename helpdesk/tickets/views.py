@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.template.loader import render_to_string
-from django.contrib.auth.decorators import permission_required, login_required, user_passes_test
+from django.contrib.auth.decorators import permission_required, login_required
 from django.shortcuts import get_object_or_404
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
@@ -15,19 +15,24 @@ from .forms import OpenForm, FileUploadForm
 # gives a sortable overview of tickets
 @permission_required('tickets.can_view_all')
 def index(request):
+    # parse values from GET request
     order_by = request.GET.get('order_by', "name")
     show_completed = request.GET.get('show_completed', False)
 
+    # determine whether to exclude completed tickets
     if show_completed:
         excluded = ""
     else:
         excluded = "C"
 
-    latest_ticket_list = Ticket.objects.exclude(status=excluded).order_by(order_by)
+    # query the database for tickets
+    ticket_list = Ticket.objects.exclude(status=excluded).order_by(order_by)
     template = loader.get_template('tickets/index.html')
     context = {
-        'latest_ticket_list': latest_ticket_list,
+        'ticket_list': ticket_list,
     }
+
+    # render template and return it
     return HttpResponse(template.render(context, request))
 
 
@@ -35,20 +40,24 @@ def index(request):
 # gives a detailed view of a specific ticket
 @permission_required('tickets.can_view_all')
 def details(request, ticket_id):
+    # process POST requests
     if request.method == "POST":
 
+        # store POST parameters
         action = request.POST.get('action')
         value = request.POST.get('value')
         ticket_id = request.POST.get('ticket_id')
 
-        print(action)
-        print(ticket_id)
-
+        # delete current ticket
         if action == "delete":
             Ticket.objects.filter(pk=ticket_id).delete()
 
+            # redirect to ticket list because the
+            # page for the deleted ticket will now
+            # return a 404 error
             return HttpResponseRedirect('/ticket')
 
+        # change status of current ticket
         elif action == "status":
             if value == "C":
                 t = Ticket.objects.get(pk=ticket_id)
@@ -71,6 +80,7 @@ def details(request, ticket_id):
 
                 return HttpResponse(t.status)
 
+        # change priority of current ticket
         elif action == "priority":
             if value.isdigit() and 1 <= int(value) <= 5:
                 t = Ticket.objects.get(pk=ticket_id)
@@ -79,27 +89,24 @@ def details(request, ticket_id):
 
                 return HttpResponse(t.status)
 
+    # process non POST requests
     else:
         template = loader.get_template('tickets/details.html')
         ticket = get_object_or_404(Ticket, pk=ticket_id)
 
-        file_form = FileUploadForm()
-
+        # query database for media associated with ticket
         media = File.objects.filter(ticket=ticket)
 
-        return HttpResponse(template.render({'ticket': ticket, 'media': media, 'file_form': file_form}, request))
-
-
-def status(request, ticket_id):
-    return HttpResponse("You're looking at the status of ticket %s" % ticket_id)
+        return HttpResponse(template.render({'ticket': ticket, 'media': media}, request))
 
 
 # view for opening new tickets
 @login_required
 def open_new(request):
+    # process POST requests
     if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
 
+        # create a form instance and populate it with data from the request:
         form = OpenForm(request.user, request.POST, prefix="openForm")
         file_form = FileUploadForm(request.POST, request.FILES, prefix="fileForm")
 
@@ -135,8 +142,9 @@ def open_new(request):
 
             return HttpResponseRedirect('/')
 
-            # if a GET (or any other method) we'll create a blank form
+    # process non POST requests
     else:
+        # create blank forms for use in page
         form = OpenForm(request.user, prefix="openForm")
         file_form = FileUploadForm(prefix="fileForm")
 

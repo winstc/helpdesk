@@ -9,7 +9,7 @@
 </style>
 
 {% block content %}
-    {% if latest_ticket_list %}
+    {% if ticket_list %}
         <div class="container-fluid">
             <div class="row justify-content-end">
                 <div class="nav-item dropdown form-group">
@@ -32,7 +32,7 @@
                     <th><a href="?order_by=-status">Status</a></th>
                     </thead>
                     <tbody>
-                    {% for ticket in latest_ticket_list %}
+                    {% for ticket in ticket_list %}
                         <tr>
                             <td><a href="/ticket/{{ ticket.id }}/">{{ ticket.name }}</a></td>
                             <td><p>{{ ticket.description }}</p></td>
