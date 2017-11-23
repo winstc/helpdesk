@@ -1,0 +1,10 @@
+#
+####### pip-requirements.txt #######
+#
+
+####### Django Site Requirements #######
+Django
+social-auth-django
+
+####### Docs Requirements #######
+Sphinx
