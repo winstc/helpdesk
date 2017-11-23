@@ -11,10 +11,33 @@ from .models import Ticket, Location, Category, File
 from .forms import OpenForm, FileUploadForm
 
 
-# index view for tickets
-# gives a sortable overview of tickets
 @permission_required('tickets.can_view_all')
 def index(request):
+    """Provide a list view for tickets.
+
+    This view allows the user to sort Ticket objects and
+    manipulate their status and priority. It also provides a
+    link for each tickets detail view.
+
+    GET:
+        This method accepts two different GET parameters
+        show_completed and order_by
+
+        show_completed:
+            @:type boolean
+
+            Sets whether to include completed tickets or not.
+
+        order_by:
+            @:type string
+
+            Used when querying the database. Can be the name of
+             any Ticket field. A '-' character
+            at the beginning denotes reverse order.
+
+    POST:
+        This method does not process any POST requests.
+    """
     # parse values from GET request
     order_by = request.GET.get('order_by', "name")
     show_completed = request.GET.get('show_completed', False)
