@@ -1,0 +1,13 @@
+include LICENSE
+include README.rst
+
+recursive-include helpdesk/static *
+recursive-include helpdesk/templates *
+
+recursive-include helpdesk/tickets/static *
+recursive-include helpdesk/userportal/static *
+
+recursive-include tickets/templates *
+recursive-include userportal/templates *
+
+recursive-include docs *
