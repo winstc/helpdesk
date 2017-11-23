@@ -4,7 +4,7 @@
 
 ####### Django Site Requirements #######
 Django
-social-auth-django
+social-auth-app-django
 
 ####### Docs Requirements #######
 Sphinx
