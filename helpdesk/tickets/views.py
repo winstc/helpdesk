@@ -23,12 +23,12 @@ def index(request):
         This method accepts two different GET parameters
         show_completed and order_by
 
-        show_completed:
+        @:arg show_completed:
             @:type boolean
 
             Sets whether to include completed tickets or not.
 
-        order_by:
+        @:arg order_by:
             @:type string
 
             Used when querying the database. Can be the name of
@@ -63,6 +63,35 @@ def index(request):
 # gives a detailed view of a specific ticket
 @permission_required('tickets.can_view_all')
 def details(request, ticket_id):
+    """Provide a detail view for tickets.
+
+        This view allows the user to see a detailed view of a Ticket object.
+        It display all Ticket information along with associated files.
+
+        GET:
+            This method does not process any GET requests.
+
+        POST:
+            This method handles POST requests for several
+            different actions.
+
+            @:arg action
+                @:type string
+
+                The action to perform on the current ticket.
+
+            @:arg value
+
+                Used for any value associated with the action.
+
+            @:arg ticket_id
+                @:type pk
+
+                The id of the Ticket object that the action is
+                to be performed on.
+
+        """
+
     # process POST requests
     if request.method == "POST":
 
