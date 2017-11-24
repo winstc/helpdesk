@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+"""Provides views for tickets app.
+"""
+
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.template.loader import render_to_string
@@ -9,6 +13,12 @@ from helpdesk.settings import EMAIL_HOST_USER
 
 from .models import Ticket, Location, Category, File
 from .forms import OpenForm, FileUploadForm
+
+__author__ = "Winston Cadwell"
+__copyright__ = "Copyright 2017, Winston Cadwell"
+__licence__ = "BSD 2-Clause Licence"
+__version__ = "1.0"
+__email__ = "wcadwell@gmail.com"
 
 
 @permission_required('tickets.can_view_all')
@@ -23,16 +33,11 @@ def index(request):
         This method accepts two different GET parameters
         show_completed and order_by
 
-        @:arg show_completed:
-            @:type boolean
-
+        *show_completed*
             Sets whether to include completed tickets or not.
-
-        @:arg order_by:
-            @:type string
-
+        *order_by*
             Used when querying the database. Can be the name of
-             any Ticket field. A '-' character
+            any Ticket field. A '-' character
             at the beginning denotes reverse order.
 
     POST:
@@ -75,21 +80,13 @@ def details(request, ticket_id):
             This method handles POST requests for several
             different actions.
 
-            @:arg action
-                @:type string
-
+            *action*
                 The action to perform on the current ticket.
-
-            @:arg value
-
+            *value*
                 Used for any value associated with the action.
-
-            @:arg ticket_id
-                @:type pk
-
+            *ticket_id*
                 The id of the Ticket object that the action is
                 to be performed on.
-
         """
 
     # process POST requests
@@ -155,6 +152,18 @@ def details(request, ticket_id):
 # view for opening new tickets
 @login_required
 def open_new(request):
+    """Provide a view for opening a new ticket.
+
+            This view provides a view for opening a new ticket. It provides
+            a simple form for the user to submit the necessary to open a new ticket.
+
+            GET:
+                This method does not process any GET requests.
+
+            POST:
+                This method handles POST requests for two forms: OpenForm and FileUploadForm
+            """
+
     # process POST requests
     if request.method == 'POST':
 

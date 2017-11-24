@@ -10,9 +10,9 @@ Welcome to helpdesk's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   modules/models
+   modules/tickets
 
-   modules/views
+   modules/userportal
 
 
 
