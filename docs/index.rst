@@ -10,6 +10,14 @@ Welcome to helpdesk's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   modules/intro
+
+   modules/installation
+
+   modules/oauth
+
+   modules/email
+
    modules/tickets
 
    modules/userportal
