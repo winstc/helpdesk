@@ -1,0 +1,19 @@
+{% extends "userportal/header.html" %}
+
+{% block content %}
+
+    <form action="{% url 'add_location' %}" method="post">
+
+        {% csrf_token %}
+
+        <table class="table">
+            {{ form.as_table }}
+        </table>
+
+        <a class="btn btn-secondary" href="{{ previous_page }}">Cancel</a>
+        <input class="btn btn-primary" type="submit" value="Save">
+
+    </form>
+
+
+{% endblock %}

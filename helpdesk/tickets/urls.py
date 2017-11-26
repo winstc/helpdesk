@@ -15,12 +15,15 @@ Including another URLconf
 """
 from django.conf.urls import url
 
-
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
+    url(r'^$', views.index, name='tickets_index'),
     url(r'^(?P<ticket_id>[0-9]+)/$', views.details, name='detail'),
-    url(r'^(?P<ticket_id>[0-9]+)/status/$', views.status, name='status'),
-    url(r'^open/$', views.open_new, name='open_new')
+    url(r'^open/$', views.open_new, name='open_new'),
+    url(r'^settings/$', views.settings, name='settings'),
+    url(r'^settings/location/(?P<pk>[0-9]+)/$', views.LocationDetailView.as_view(), name='location'),
+    url(r'^settings/location/add/$', views.add_location, name='add_location'),
+    url(r'^settings/category/(?P<pk>[0-9]+)/$', views.CategoryDetailView.as_view(), name='category'),
+    url(r'^settings/category/add/$', views.add_category, name='add_category'),
 ]

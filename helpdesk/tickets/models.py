@@ -114,8 +114,8 @@ class Ticket(models.Model):
         MaxValueValidator(1)
     ])
     submissionDate = models.DateTimeField('date submitted', default=django.utils.timezone.now)
-    location = models.ForeignKey(Location, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, null=True, on_delete=models.SET_NULL)
+    category = models.ForeignKey(Category, null=True, on_delete=models.SET_NULL)
     ipAddress = models.GenericIPAddressField(null=True, blank=True)
 
     def __str__(self):

@@ -36,15 +36,13 @@
             <div class="card-header">Media</div>
             {% if media %}
                 <div class="card-body">
-                    <table class="table">
+                    <ul class="list-unstyled">
                         {% for file in media %}
-                            <tr>
-                                <td><a title="{{ file.description }}" href="/media/uploads/{{ file }}">{{ file }}</a>
-                                </td>
-                                <td>{{ file.timestamp }}</td>
-                            </tr>
+                            <li>
+                                <a title="{{ file.description }}" href="/media/uploads/{{ file }}">{{ file }}</a>
+                            </li>
                         {% endfor %}
-                    </table>
+                    </ul>
                 </div>
             {% else %}
                 <div class="card-body">

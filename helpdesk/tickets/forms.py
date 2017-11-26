@@ -1,6 +1,6 @@
 from django.forms import ModelForm, TextInput
 
-from .models import Ticket, File
+from .models import Ticket, File, Location, Category
 
 
 class OpenForm(ModelForm):
@@ -28,3 +28,17 @@ class FileUploadForm(ModelForm):
         help_texts = {
             'description': "Give a brief description of what the file is"
         }
+
+
+class AddLocationForm(ModelForm):
+
+    class Meta:
+        model = Location
+        fields = ["name", "description", "longitude", "latitude"]
+
+
+class AddCategoryForm(ModelForm):
+
+    class Meta:
+        model = Category
+        fields = ["name", "description"]

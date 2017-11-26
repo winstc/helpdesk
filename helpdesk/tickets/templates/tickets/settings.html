@@ -1,0 +1,120 @@
+{% extends "userportal/header.html" %}
+
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static 'tickets/css/grid.css' %}" type="text/css"/>
+
+{% block content %}
+
+    {% csrf_token %}
+
+    <div class="card-columns">
+        <div class="card">
+            <div class="card-header">Locations</div>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <table class="table table-hover">
+                            <tbody>
+                            {% for location in locations %}
+                                <tr>
+                                    <td class="text-center">
+                                        <input type="checkbox" class="checkbox locationCheckbox"
+                                               data-lid="{{ location.id }}">
+                                    </td>
+                                    <td><a href="{% url 'location' location.pk %}">{{ location.name }}</a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row justify-content-end">
+                        <div class="form-group">
+                            <a href="{% url 'add_location' %}" class="btn btn-primary">Add</a>
+                            <button class="btn btn-danger" id="locationDelete">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Categories</div>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <table class="table table-hover">
+                            <tbody>
+                            {% for category in categories %}
+                                <tr>
+                                    <td class="text-center">
+                                        <input type="checkbox" class="checkbox categoryCheckbox"
+                                               data-cid="{{ category.id }}">
+                                    </td>
+                                    <td><a href="{% url 'category' category.pk %}">{{ category.name }}</a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row justify-content-end">
+                        <div class="form-group">
+                            <a href="{% url 'add_category' %}" class="btn btn-primary">Add</a>
+                            <button class="btn btn-danger" id="categoryDelete">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#categoryDelete").click(function () {
+                let cids = [];
+                $(".categoryCheckbox:checkbox:checked").each(function () {
+                    cids.push($(this).data('cid'))
+                });
+                if (confirm("Are you sure you want to delete the selected items?")) {
+                    let i;
+                    for (i in cids) {
+                        let url = `/ticket/settings/category/${cids[i]}/`;
+                        $.post(url,
+                            {
+                                csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                                category_id: i,
+                                action: "delete"
+                            },
+                            function () {
+                                window.location.reload(false)
+                            }
+                        );
+                    }
+                }
+            });
+            $("#locationDelete").click(function () {
+                let lids = [];
+                $(".locationCheckbox:checkbox:checked").each(function () {
+                    lids.push($(this).data('lid'))
+                });
+                if (confirm("Are you sure you want to delete the selected items?")) {
+                    let i;
+                    for (i in lids) {
+                        let url = `/ticket/settings/location/${lids[i]}/`;
+                        $.post(url,
+                            {
+                                csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                                category_id: i,
+                                action: "delete"
+                            },
+                            function () {
+                                window.location.reload(false)
+                            }
+                        );
+                    }
+                }
+            });
+        });
+    </script>
+
+{% endblock %}
+

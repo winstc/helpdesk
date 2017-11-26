@@ -1,0 +1,16 @@
+{% extends "userportal/header.html" %}
+
+{% block content %}
+    <div class="container-fluid align-content-center">
+        <table class="table text-center">
+            <tr>
+                <td>Name:</td>
+                <td>{{ object.name }}</td>
+            </tr>
+            <tr>
+                <td>Description:</td>
+                <td>{{ object.description }}</td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}

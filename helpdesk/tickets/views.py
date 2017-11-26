@@ -9,10 +9,11 @@ from django.contrib.auth.decorators import permission_required, login_required
 from django.shortcuts import get_object_or_404
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
+from django.views.generic import DetailView
 from helpdesk.settings import EMAIL_HOST_USER
 
 from .models import Ticket, Location, Category, File
-from .forms import OpenForm, FileUploadForm
+from .forms import OpenForm, FileUploadForm, AddLocationForm, AddCategoryForm
 
 __author__ = "Winston Cadwell"
 __copyright__ = "Copyright 2017, Winston Cadwell"
@@ -216,3 +217,117 @@ def open_new(request):
     return HttpResponse(
         template.render({"locations": locations, "categories": categories, 'form': form, 'file_form': file_form},
                         request))
+
+
+def settings(request):
+    """Provide a view for changing tickets app settings.
+
+    Allows the user to change settings associated with the tickets
+    app.
+
+        GET:
+            This method does not process any GET requests.
+
+        POST:
+            This method handles POST requests for two forms: OpenForm and FileUploadForm
+    """
+
+    template = loader.get_template('tickets/settings.html')
+    locations = Location.objects.all()
+    categories = Category.objects.all()
+
+    return HttpResponse(template.render({"locations": locations, "categories": categories}, request))
+
+
+class LocationDetailView(DetailView):
+    """Provide a detailed view for Locations
+
+        GET:
+            This method does not process any GET requests.
+
+        POST:
+            This method accepts POST request for deleting Location objects
+    """
+
+    model = Location
+
+    def post(self, request, *args, **kwargs):
+        action = request.POST.get('action')
+        if action == "delete":
+            Location.objects.filter(pk=self.kwargs.get('pk')).delete()
+            return HttpResponse('')
+
+
+def add_location(request):
+    """Provide a view for adding a location.
+
+        GET:
+            This method does not process any GET requests.
+
+        POST:
+            This method accepts POST request for the AddLocationForm
+    """
+
+    previous_page = request.META.get('HTTP_REFERER', '/')
+
+    if request.method == "POST":
+        form = AddLocationForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+
+        return HttpResponseRedirect('/ticket/settings/')
+
+    else:
+        form = AddLocationForm()
+
+    template = loader.get_template('tickets/add_location.html')
+
+    return HttpResponse(template.render({"form": form, "previous_page": previous_page}, request))
+
+
+class CategoryDetailView(DetailView):
+    """Provide a detailed view for Categories
+
+        GET:
+            This method does not process any GET requests.
+
+        POST:
+            This method accepts POST request for deleting Category objects
+    """
+
+    model = Category
+
+    def post(self, request, *args, **kwargs):
+        action = request.POST.get('action')
+        if action == "delete":
+            Category.objects.filter(pk=self.kwargs.get('pk')).delete()
+            return HttpResponse('')
+
+
+def add_category(request):
+    """Provide a view for adding a location.
+
+        GET:
+            This method does not process any GET requests.
+
+        POST:
+            This method accepts POST request for the AddCategoryForm
+    """
+
+    previous_page = request.META.get('HTTP_REFERER', '/')
+
+    if request.method == "POST":
+        form = AddCategoryForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+
+        return HttpResponseRedirect('/ticket/settings/')
+
+    else:
+        form = AddCategoryForm()
+
+    template = loader.get_template('tickets/add_category.html')
+
+    return HttpResponse(template.render({"form": form, "previous_page": previous_page}, request))
