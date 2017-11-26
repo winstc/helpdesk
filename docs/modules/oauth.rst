@@ -12,8 +12,12 @@ API Keys
 For the feature to work you will need a valid *OAuth2 Key* and *OAuth2 Secret*.
 These can be obtained through the `Google Cloud Console`_.
 
-    .. _Google Cloud Console: https://console.cloud.google.com/
 
+After you have obtained the appropriate keys, edit *credentials.py*
+so that :const:`SOCIAL_AUTH_GOOGLE_OAUTH2_KEY` and :const:`SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET` are
+equal to the key and secret you obtained from the `Google Cloud Console`_.
+
+    .. _Google Cloud Console: https://console.cloud.google.com/
 
 Restricting Login
 -----------------
