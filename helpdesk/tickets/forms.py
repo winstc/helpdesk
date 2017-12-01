@@ -1,6 +1,16 @@
+#!/usr/bin/env python
+"""Provides views for tickets app.
+"""
+
 from django.forms import ModelForm, TextInput
 
 from .models import Ticket, File, Location, Category
+
+__author__ = "Winston Cadwell"
+__copyright__ = "Copyright 2017, Winston Cadwell"
+__licence__ = "BSD 2-Clause Licence"
+__version__ = "1.0"
+__email__ = "wcadwell@gmail.com"
 
 
 class OpenForm(ModelForm):
