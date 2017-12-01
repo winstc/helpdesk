@@ -1,0 +1,20 @@
+{% extends "userportal/header.html" %}
+
+{% block content %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <h3>User Settings</h3>
+        <table class="table">
+            {{ account_form.as_table }}
+        </table>
+
+        <h3>Email Setting</h3>
+        <table class="table">
+            {{ form.as_table }}
+        </table>
+
+        <input class="btn btn-primary" type="submit" value="Save">
+    </form>
+
+{% endblock %}

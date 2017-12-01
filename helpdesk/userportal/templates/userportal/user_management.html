@@ -1,0 +1,119 @@
+{% extends "userportal/header.html" %}
+
+{% load auth_extras %}
+
+{% block content %}
+
+    {% csrf_token %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="btn-group form-group col-1">
+                <button id="addUser" class="btn btn-primary">Add</button>
+                <button id="masterDelete" class="btn btn-danger" disabled>Delete</button>
+                <button id="toggleAdmin" class="btn btn-warning" disabled>Toggle Admin</button>
+            </div>
+            <div class="dropdown col-md-1 offset-md-10">
+                <a class="dropdown-toggle btn btn-secondary" id="dropdown-filter"
+                   data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="true">Filter
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdown-filter">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <table class="table table-hover">
+                <thead class="thead-light">
+                <th><input type="checkbox" class="checkbox" id="masterCheckbox"></th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Admin</th>
+                </thead>
+                <tbody>
+                {% for user in object_list %}
+                    <tr>
+                        <td><input type="checkbox" class="checkbox userCheckbox"
+                                   data-uid="{{ user.id }}"></td>
+                        <td><a href="{% url 'user_details' user.id %}">{{ user.username }}</a></td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            {% if user|has_group:"Admin" %}
+                                <span style="color: green" class="oi oi-check" title="check" aria-hidden="true"></span>
+                            {% else %}
+                                <span style="color: red;" class="oi oi-x" title="x" aria-hidden="true"></span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#masterCheckbox:checkbox").change(function () {
+                if ($(this).is(":checked")) {
+                    $(".userCheckbox").prop("checked", true)
+                }
+                else {
+                    $(".userCheckbox").prop("checked", false)
+                }
+                $("#masterDelete").prop("disabled", checkBoxes.filter(':checked').length < 1)
+                $("#toggleAdmin").prop("disabled", checkBoxes.filter(':checked').length < 1)
+
+            });
+
+            let checkBoxes = $('.userCheckbox');
+            checkBoxes.change(function () {
+                $("#masterDelete").prop("disabled", checkBoxes.filter(':checked').length < 1)
+                $("#toggleAdmin").prop("disabled", checkBoxes.filter(':checked').length < 1)
+            });
+
+            $("#masterDelete").click(function () {
+                if (confirm("Are you sure you want to delete the selected users?")) {
+                    let checked = checkBoxes.filter(':checked');
+                    for (let i = 0; i < checked.length; i++) {
+                        $(checked[i]).prop("checked", false);
+                        $("#masterDelete").prop("disabled", checkBoxes.filter(':checked').length < 1);
+                        $("#toggleAdmin").prop("disabled", checkBoxes.filter(':checked').length < 1);
+                        $.post(("/users/" + $(checked[i]).data('uid') + "/"), {
+                                csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                                action: "delete"
+                            },
+                            function () {
+                                window.location.reload(false)
+                            }
+                        );
+                    }
+                }
+
+            });
+
+            $("#toggleAdmin").click(function () {
+                if (confirm("Are you sure you want to toggle the admin status of the selected users?")) {
+                    let checked = checkBoxes.filter(':checked');
+                    for (let i = 0; i < checked.length; i++) {
+                        $(checked[i]).prop("checked", false);
+                        $("#masterDelete").prop("disabled", checkBoxes.filter(':checked').length < 1);
+                        $("#toggleAdmin").prop("disabled", checkBoxes.filter(':checked').length < 1);
+                        $.post(("/users/" + $(checked[i]).data('uid') + "/"), {
+                                csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                                action: "toggle_admin"
+                            },
+                            function () {
+                                window.location.reload(false)
+                            }
+                        );
+                    }
+                }
+
+            });
+        });
+    </script>
+
+
+{% endblock %}

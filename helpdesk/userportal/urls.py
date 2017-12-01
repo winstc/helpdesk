@@ -15,9 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url
 
-
 from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'^preferences/$', views.preferences, name='preferences'),
+    url(r'^users/manage/$', views.UserManagement.as_view(), name="user_management"),
+    url(r'^users/add/$', views.add_user, name='add_user'),
+    url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetails, name="user_details")
 ]

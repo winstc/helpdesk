@@ -1,0 +1,13 @@
+{% extends "userportal/header.html" %}
+
+{% block content %}
+    <div class="container-fluid align-content-center">
+        <form class="form" method="post" action="{% url 'user_details' form.instance.id %}">
+            {% csrf_token %}
+            <table class="table">
+                {{ form.as_table }}
+            </table>
+            <input class="btn btn-primary" type="submit" value="Save">
+        </form>
+    </div>
+{% endblock %}

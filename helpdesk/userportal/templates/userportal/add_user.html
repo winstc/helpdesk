@@ -1,0 +1,14 @@
+{% extends "userportal/header.html" %}
+
+{% block content %}
+    <form method="POST" action="{% url 'add_user' %}">
+
+        {% csrf_token %}
+
+        <table class="table">
+            {{ form.as_table }}
+        </table>
+
+        <input class="btn btn-primary" type="submit" value="Submit">
+    </form>
+{% endblock %}
