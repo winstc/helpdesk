@@ -2,52 +2,96 @@
 
 {% load staticfiles %}
 <link rel="stylesheet" href="{% static 'tickets/css/grid.css' %}" type="text/css"/>
-<style>
-    .col-4 {
-        color: red;
-    }
-</style>
 
 {% block content %}
-    {% if ticket_list %}
-        <div class="container-fluid">
-            <div class="row justify-content-end">
-                <div class="nav-item dropdown form-group">
-                    <button class="btn btn-secondary nav-link dropdown-toggle" id="dropdown-filter"
-                            data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="true">Filter
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdown-filter">
-                        <a class="dropdown-item" href="?show_completed=True">Show Completed Tickets</a>
-                    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="btn-group form-group col-1">
+                <button id="masterDelete" class="btn btn-danger" disabled>Delete</button>
+            </div>
+            <div class="dropdown col-md-1 offset-md-10">
+                <a class="dropdown-toggle btn btn-secondary" id="dropdown-filter"
+                   data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="true">Filter
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdown-filter">
+                        <a class="dropdown-item" href="?show_completed=true">Show Completed</a>
                 </div>
             </div>
-            <div class="row">
-                <table class="table table-hover table-stripped">
-                    <thead class="thead-light">
-                    <th><a href="?order_by=-name">Name</a></th>
-                    <th>Description</th>
-                    <th><a href="?order_by=-submissionDate">Date Submitted</a></th>
-                    <th><a href="?order_by=-priority">Priority</a></th>
-                    <th><a href="?order_by=-status">Status</a></th>
-                    </thead>
-                    <tbody>
+        </div>
+        <div class="row">
+            <table class="table table-hover">
+                <thead class="thead-light">
+                <th><input type="checkbox" class="checkbox" id="masterCheckbox"></th>
+                <th><a href="?order_by=-name">Name</a></th>
+                <th>Description</th>
+                <th><a href="?order_by=-submissionDate">Date Submitted</a></th>
+                <th><a href="?order_by=-priority">Priority</a></th>
+                <th><a href="?order_by=-status">Status</a></th>
+                </thead>
+                {% if ticket_list %}
                     {% for ticket in ticket_list %}
+                        <tbody>
                         <tr>
+                            <td><input type="checkbox" class="checkbox ticketCheckbox"
+                                       data-tid="{{ ticket.id }}"></td>
                             <td><a href="/ticket/{{ ticket.id }}/">{{ ticket.name }}</a></td>
                             <td><p>{{ ticket.description }}</p></td>
                             <td>{{ ticket.submissionDate }}</td>
                             <td>{{ ticket.priority }}</td>
-
                             <td>{% include 'tickets/status_dropdown.html' %}</td>
                         </tr>
+                        </tbody>
                     {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                {% else %}
+                    <tr>
+                        <div class="alert alert-warning" role="alert">
+                            Your query returned no tickets. Please try a different query.
+                        </div>
+                    </tr>
+
+                {% endif %}
+            </table>
         </div>
-    {% else %}
-        <p>No tickets to show.</p>
-    {% endif %}
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#masterCheckbox:checkbox").change(function () {
+                if ($(this).is(":checked")) {
+                    $(".ticketCheckbox").prop("checked", true)
+                }
+                else {
+                    $(".ticketCheckbox").prop("checked", false)
+                }
+                $("#masterDelete").prop("disabled", checkBoxes.filter(':checked').length < 1)
+            });
+
+            let checkBoxes = $('.ticketCheckbox');
+            checkBoxes.change(function () {
+                $("#masterDelete").prop("disabled", checkBoxes.filter(':checked').length < 1)
+            });
+
+            $("#masterDelete").click(function () {
+                if (confirm("Are you sure you want to delete the selected items?")) {
+                    let checked = checkBoxes.filter(':checked');
+                    for (let i = 0; i < checked.length; i++) {
+                        $(checked[i]).prop("checked", false);
+                        $("#masterDelete").prop("disabled", checkBoxes.filter(':checked').length < 1)
+                        $.post(("/ticket/" + $(checked[i]).data('tid') + "/"), {
+                                csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                                ticket_id: $(checked[i]).data('tid'),
+                                action: "delete"
+                            },
+                            function () {
+                                window.location.reload(false)
+                            }
+                        );
+                    }
+                }
+            });
+        });
+    </script>
 
 {% endblock %}
