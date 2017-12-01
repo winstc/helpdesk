@@ -6,11 +6,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import permission_required, login_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
 from django.views.generic import DetailView
 from helpdesk.settings import EMAIL_HOST_USER
+import json
 
 from .models import Ticket, Location, Category, File
 from .forms import OpenForm, FileUploadForm, AddLocationForm, AddCategoryForm
@@ -49,7 +51,7 @@ def index(request):
     show_completed = request.GET.get('show_completed', False)
 
     # determine whether to exclude completed tickets
-    if show_completed:
+    if show_completed == "true":
         excluded = ""
     else:
         excluded = "C"
@@ -59,6 +61,10 @@ def index(request):
     template = loader.get_template('tickets/index.html')
     context = {
         'ticket_list': ticket_list,
+        'current_query': json.dumps({
+            'show_completed': show_completed,
+            'order_by': order_by,
+        })
     }
 
     # render template and return it
@@ -105,7 +111,7 @@ def details(request, ticket_id):
             # redirect to ticket list because the
             # page for the deleted ticket will now
             # return a 404 error
-            return HttpResponseRedirect('/ticket')
+            return HttpResponseRedirect('/ticket/')
 
         # change status of current ticket
         elif action == "status":
@@ -185,28 +191,28 @@ def open_new(request):
                     new_file.ticket = new_ticket
                     new_file.save()
 
-            # send user a confirmation email
+            # send user a confirmation email, if new_email is enabled in their settings
             # the email is rendered using the confirmation-email.html template
             # located in 'tickets/templates'
-            subject = "Ticket Submission Confirmation"
-            recipient = current_user.email
-            from_email = EMAIL_HOST_USER
-            data = {
-                'user': current_user,
-                'ticket': new_ticket
-            }
-            html_message = render_to_string('tickets/confirmation_email.html', data)
-            text_message = strip_tags(html_message)
+            if request.user.emailpreferences.new_ticket:
+                subject = "Ticket Submission Confirmation"
+                recipient = current_user.email
+                from_email = EMAIL_HOST_USER
+                data = {
+                    'user': current_user,
+                    'ticket': new_ticket
+                }
+                html_message = render_to_string('tickets/confirmation_email.html', data)
+                text_message = strip_tags(html_message)
 
-            msg = EmailMultiAlternatives(subject, text_message, from_email, [recipient])
-            msg.attach_alternative(html_message, "text/html")
-            msg.send()
+                msg = EmailMultiAlternatives(subject, text_message, from_email, [recipient])
+                msg.attach_alternative(html_message, "text/html")
+                msg.send()
 
-            return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/')
 
     # process non POST requests
-    else:
-        # create blank forms for use in page
+    else:  # create blank forms for use in page
         form = OpenForm(request.user, prefix="openForm")
         file_form = FileUploadForm(prefix="fileForm")
 
@@ -219,6 +225,7 @@ def open_new(request):
                         request))
 
 
+@permission_required('tickets.can_view_all')
 def settings(request):
     """Provide a view for changing tickets app settings.
 
@@ -239,7 +246,7 @@ def settings(request):
     return HttpResponse(template.render({"locations": locations, "categories": categories}, request))
 
 
-class LocationDetailView(DetailView):
+class LocationDetailView(PermissionRequiredMixin, DetailView):
     """Provide a detailed view for Locations
 
         GET:
@@ -248,6 +255,8 @@ class LocationDetailView(DetailView):
         POST:
             This method accepts POST request for deleting Location objects
     """
+
+    permission_required = 'tickets.can_view_all'
 
     model = Location
 
@@ -258,6 +267,7 @@ class LocationDetailView(DetailView):
             return HttpResponse('')
 
 
+@permission_required('tickets.can_view_all')
 def add_location(request):
     """Provide a view for adding a location.
 
@@ -286,7 +296,7 @@ def add_location(request):
     return HttpResponse(template.render({"form": form, "previous_page": previous_page}, request))
 
 
-class CategoryDetailView(DetailView):
+class CategoryDetailView(PermissionRequiredMixin, DetailView):
     """Provide a detailed view for Categories
 
         GET:
@@ -295,6 +305,8 @@ class CategoryDetailView(DetailView):
         POST:
             This method accepts POST request for deleting Category objects
     """
+
+    permission_required = 'tickets.can_view_all'
 
     model = Category
 
@@ -305,6 +317,7 @@ class CategoryDetailView(DetailView):
             return HttpResponse('')
 
 
+@permission_required('tickets.can_view_all')
 def add_category(request):
     """Provide a view for adding a location.
 
