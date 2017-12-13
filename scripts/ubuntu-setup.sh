@@ -37,10 +37,14 @@ postgres_passwd=$(openssl rand -base64 32)
 service postgresql restart
 
 # setup postgres db
-scripts/database_setup.sh $postgres_passwd
+${HELPDESK_ROOT}/scripts/database_setup.sh $postgres_passwd
 
 # update postgres password in credentials.py
+cp ${HELPDESK_ROOT}/helpdesk/helpdesk/credentials.py.template ${HELPDESK_ROOT}/helpdesk/helpdesk/credentials.py
 sed -i.bkp -e "s#postgres_password#$postgres_passwd#" ${HELPDESK_ROOT}/helpdesk/helpdesk/credentials.py
+
+# update credentials
+${HELPDESK_ROOT}/scripts/generate_credentials.sh
 
 # migrate django database
 ${HELPDESK_ROOT}/helpdesk/manage.py makemigrations
@@ -61,7 +65,8 @@ ${HELPDESK_ROOT}/scripts/generate_apache_conf.sh $HELPDESK_ROOT
 cp ${HELPDESK_ROOT}/apache-conf/000-default.conf /etc/apache2/sites-available/
 
 # change ownership of static file dirs
-mkdir -r /var/www/html/media/uploads
+mkdir /var/www/html/media
+mkdir /var/www/html/media/uploads
 chown :www-data /var/www/html/media/uploads
 
 # restart apache
