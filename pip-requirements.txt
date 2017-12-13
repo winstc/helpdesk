@@ -1,10 +1,12 @@
 #
 ####### pip-requirements.txt #######
-#
+
 
 ####### Django Site Requirements #######
 Django
 social-auth-app-django
+psycopg2
+django-generate-secret-key
 
 ####### Docs Requirements #######
 Sphinx

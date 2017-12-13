@@ -54,3 +54,4 @@ fabric.properties
 
 /helpdesk/helpdesk/credentials.py
 /helpdesk/media/uploads/
+/helpdesk/secretkey.txt
