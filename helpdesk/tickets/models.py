@@ -103,7 +103,7 @@ class Ticket(models.Model):
         (WAITING, "Waiting")
     )
 
-    user = models.ForeignKey(User, default=1)
+    user = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     description = models.TextField()
     status = models.CharField(max_length=1,
