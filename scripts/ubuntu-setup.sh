@@ -34,11 +34,13 @@ chmod 440 ${HELPDESK_ROOT}/helpdesk/secretkey.txt
 # generate password for postgres
 postgres_passwd=$(openssl rand -base64 32)
 
+service postgresql restart
+
 # setup postgres db
 scripts/database_setup.sh $postgres_passwd
 
 # update postgres password in credentials.py
-sed -i.bkp -e "s/\${password}/$postgres_passwd/" credentials.py
+sed -i.bkp -e "s#postgres_password#$postgres_passwd#" ${HELPDESK_ROOT}/helpdesk/helpdesk/credentials.py
 
 # migrate django database
 ${HELPDESK_ROOT}/helpdesk/manage.py makemigrations
@@ -56,9 +58,10 @@ ${HELPDESK_ROOT}/helpdesk/manage.py createsuperuser
 ${HELPDESK_ROOT}/scripts/generate_apache_conf.sh $HELPDESK_ROOT
 
 # move apache conf
-cp ${HELPDESK_ROOT}/apache-conf/000-default /etc/apache2/sites-available/
+cp ${HELPDESK_ROOT}/apache-conf/000-default.conf /etc/apache2/sites-available/
 
 # change ownership of static file dirs
+mkdir -r /var/www/html/media/uploads
 chown :www-data /var/www/html/media/uploads
 
 # restart apache

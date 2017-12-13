@@ -2,9 +2,6 @@
 
 
 su - postgres <<EOSU
-
-/usr/lib/postgresql/9.6/bin/pg_ctl -D /var/lib/postgresql/9.6/main -l logfile start
-
 psql postgres -c "CREATE DATABASE helpdesk;"
 
 psql postgres -c "CREATE USER helpdeskuser WITH PASSWORD '$1';"
