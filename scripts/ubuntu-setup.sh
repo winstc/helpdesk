@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # install apache2, sqlite, python3, pip, git
-sudo apt-get update
-sudo apt-get install python3-pip python3-dev libpq-dev postgresql postgresql-contrib apache2 \
+apt-get update
+apt-get install python3-pip python3-dev libpq-dev postgresql postgresql-contrib apache2 \
                         libapache2-mod-wsgi-py3 sqlite git
 
 # clone repo
@@ -59,10 +59,10 @@ ${HELPDESK_ROOT}/scripts/generate_apache_conf.sh $HELPDESK_ROOT
 cp ${HELPDESK_ROOT}/apache-conf/000-default /etc/apache2/sites-available/
 
 # change ownership of static file dirs
-sudo chown :www-data /var/www/html/media/uploads
+chown :www-data /var/www/html/media/uploads
 
 # restart apache
-sudo systemctl restart apache2.service
+systemctl restart apache2.service
 
 echo "Setup Complete!"
 
