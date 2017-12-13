@@ -2,7 +2,7 @@
 
 # install apache2, sqlite, python3, pip, git
 apt-get update
-apt-get install python3-pip python3-dev libpq-dev postgresql postgresql-contrib apache2 \
+apt-get install -y python3-pip python3-dev libpq-dev postgresql postgresql-contrib apache2 \
                         libapache2-mod-wsgi-py3 sqlite git
 
 # clone repo
