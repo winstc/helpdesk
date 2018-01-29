@@ -1,0 +1,32 @@
+{
+  "email_server": [
+    {
+      "host": "smtp.example.com",
+      "port": "587",
+      "user": "user@example.com",
+      "password": "examplepassword",
+      "use_tls": "True"
+    }
+  ],
+
+  "google_oauth2": [
+    {
+      "key": "examplekey",
+      "secret": "examplesecret",
+      "domain_whitelist": [
+        "examplewhitelist.com"
+      ]
+    }
+  ],
+
+  "postgres_database": [
+    {
+      "name": "helpdesk",
+      "user": "helpdeskuser",
+      "password": "examplepassword",
+      "host": "example.com",
+      "port": "5432"
+    }
+  ]
+
+}

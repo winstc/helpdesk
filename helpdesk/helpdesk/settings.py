@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 from . import credentials
+import json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,6 +27,14 @@ with open(os.path.join(BASE_DIR, 'secretkey.txt')) as f:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+if False:
+    CONFIG_FILE = os.path.join(BASE_DIR, 'config.json')
+else:
+    CONFIG_FILE = os.path.join(os.path.expanduser("~"), '.config/helpdesk/config.json')
+
+with open(CONFIG_FILE, 'r') as f:
+    CONFIG = json.load(f)
 
 ALLOWED_HOSTS = []
 
@@ -78,14 +87,7 @@ WSGI_APPLICATION = 'helpdesk.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'helpdesk',
-        'USER': 'helpdeskuser',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'POST': '',
-    }
+    'default': CONFIG['database'][0]
 }
 
 # Password validation
@@ -142,14 +144,14 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # Setting for Google Authentication
 # These can be configured in credentials.py
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = credentials.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = credentials.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
-SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = credentials.SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = CONFIG['google_oauth2'][0]['key']
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = CONFIG['google_oauth2'][0]['secret']
+SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = CONFIG['google_oauth2'][0]['domain_whitelist']
 
 # Email Server Settings - Used to send email
 # These can be configured in credentials.py
-EMAIL_HOST = credentials.EMAIL_HOST
-EMAIL_PORT = credentials.EMAIL_PORT
-EMAIL_HOST_USER = credentials.EMAIL_HOST_USER
-EMAIL_HOST_PASSWORD = credentials.EMAIL_HOST_PASSWORD
-EMAIL_USE_TLS = credentials.EMAIL_USE_TLS
+EMAIL_HOST = CONFIG['email_server'][0]['host']
+EMAIL_PORT = CONFIG['email_server'][0]['port']
+EMAIL_HOST_USER = CONFIG['email_server'][0]['user']
+EMAIL_HOST_PASSWORD = CONFIG['email_server'][0]['password']
+EMAIL_USE_TLS = CONFIG['email_server'][0]['use_tls']
