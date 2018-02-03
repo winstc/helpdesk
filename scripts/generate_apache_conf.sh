@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 HELPDESK_ROOT=${1%/}
 TEMPLATE_DIR=${HELPDESK_ROOT}/apache-conf
 TEMPLATE=${TEMPLATE_DIR}/000-default.conf
