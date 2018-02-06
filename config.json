@@ -1,32 +1,36 @@
 {
-  "email_server": [
-    {
-      "host": "smtp.example.com",
-      "port": "587",
-      "user": "user@example.com",
-      "password": "examplepassword",
-      "use_tls": "True"
-    }
+  "secret_key": "replace_me",
+  "debug": false,
+  "allowed_hosts": [
+
   ],
-
-  "google_oauth2": [
-    {
-      "key": "examplekey",
-      "secret": "examplesecret",
-      "domain_whitelist": [
-        "examplewhitelist.com"
-      ]
+  "email_server": {
+    "host": "smtp.example.com",
+    "port": "587",
+    "user": "user@example.com",
+    "password": "examplepassword",
+    "use_tls": "True"
+  },
+  "google_oauth2": {
+    "key": "examplekey",
+    "secret": "examplesecret",
+    "domain_whitelist": [
+      "examplewhitelist.com"
+    ]
+  },
+  "databases": {
+    "active_db": "postgres_primary",
+    "postgres_primary": {
+      "ENGINE": "django.db.backends.postgresql",
+      "NAME": "helpdesk",
+      "USER": "helpdeskuser",
+      "PASSWORD": "examplepassword",
+      "HOST": "example.com",
+      "PORT": "5432"
+    },
+    "sqlite_primary": {
+      "ENGINE": "django.db.backends.sqlite3",
+      "NAME": "db.sqlite3"
     }
-  ],
-
-  "postgres_database": [
-    {
-      "name": "helpdesk",
-      "user": "helpdeskuser",
-      "password": "examplepassword",
-      "host": "example.com",
-      "port": "5432"
-    }
-  ]
-
+  }
 }
