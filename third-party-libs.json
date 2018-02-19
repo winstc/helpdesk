@@ -1,0 +1,49 @@
+{
+  "bootstrap-css": {
+    "source": "https://unpkg.com/bootstrap@4.0.0/dist/css/",
+    "destination": "userportal/static/third_party/css/bootstrap",
+    "files": [
+      "bootstrap.min.css",
+      "bootstrap-grid.min.css",
+      "bootstrap-reboot.min.css",
+      "bootstrap.min.css.map"
+    ]
+  },
+  "bootstrap-js": {
+    "source": "https://unpkg.com/bootstrap@4.0.0/dist/js/",
+    "destination": "userportal/static/third_party/js",
+    "files": [
+      "bootstrap.min.js",
+      "bootstrap.min.js.map"
+    ]
+  },
+  "popper.js": {
+    "source": "https://unpkg.com/popper.js@1.12.9/dist/",
+    "destination": "userportal/static/third_party/js",
+    "files": [
+      "popper.min.js"
+    ]
+  },
+  "jquery": {
+    "source": "https://unpkg.com/jquery@3.3.1/dist/",
+    "destination": "userportal/static/third_party/js",
+    "files": [
+      "jquery.min.js"
+    ]
+  },
+  "open-iconic-bootstrap-css": {
+    "source": "https://unpkg.com/open-iconic@1.1.1/font/css/",
+    "destination": "userportal/static/third_party/fonts/open-iconic/css",
+    "files": [
+      "open-iconic-bootstrap.min.css"
+    ]
+  },
+  "open-iconic-bootstrap-fonts": {
+    "source": "https://unpkg.com/open-iconic@1.1.1/font/fonts/",
+    "destination": "userportal/static/third_party/fonts/open-iconic/fonts",
+    "files": [
+      "open-iconic.ttf",
+      "open-iconic.woff"
+    ]
+  }
+}

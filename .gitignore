@@ -55,3 +55,6 @@ fabric.properties
 /helpdesk/helpdesk/credentials.py
 /helpdesk/media/uploads/
 /helpdesk/secretkey.txt
+
+/helpdesk/helpdesk/userportal/static/third_party/
+
